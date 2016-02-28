@@ -1,0 +1,77 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+
+    <title>Example of usage of Weather Widget</title>
+    <meta name="description" content="Example of usage of Weather Widge">
+    <meta name="author" content="Denis Malyshev">
+
+    <style>
+        .row, .column {
+            display: flex;
+        }
+
+        .row {
+            -ms-flex-direction: row;
+            -webkit-flex-direction: row;
+            flex-direction: row;
+        }
+
+        .column {
+            -ms-flex-direction: column;
+            -webkit-flex-direction: column;
+            flex-direction: column;
+        }
+        .cell.center {
+            align-self: center;
+        }
+
+        .icon {
+            width: 50px;
+            height: 50px;
+        }
+        .text-right {
+            text-align: right;
+        }
+        .large {
+            font-size: 24pt;
+        }
+    </style>
+</head>
+
+<body>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/weather-icons/2.0.10/css/weather-icons.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0/angular-csp.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0/angular-resource.min.js"></script>
+    <script src="Scripts/widget.js"></script>
+
+    <w-widget ng-cloak units="imperial" wind>
+        <article class="row">
+            <i class="wi cell center large" ng-class="main.data.iconClass"></i>
+            <div class="column">
+                <div class="text-right" ng-show="main.data.temp">{{main.data.temp}}</div>
+                <div class="text-right" ng-show="main.data.humidity">Humidity: {{main.data.humidity}} %</div>
+                <div class="text-right" ng-show="wind && main.data.wind">Wind: {{main.data.wind}}</div>
+            </div>
+        </article>
+        <article class="row">
+            <h3>{{main.data.location}}</h3>
+        </article>
+    </w-widget>
+    <w-widget ng-cloak units="metric">
+        <article class="row">
+            <i class="wi cell center large" ng-class="main.data.iconClass"></i>
+            <div class="column">
+                <div class="text-right" ng-show="main.data.temp">{{main.data.temp}}</div>
+                <div class="text-right" ng-show="main.data.humidity">Humidity: {{main.data.humidity}} %</div>
+                <div class="text-right" ng-show="wind && main.data.wind">Wind: {{main.data.wind}}</div>
+            </div>
+        </article>
+        <article class="row">
+            <h3>{{main.data.location}}</h3>
+        </article>
+    </w-widget>
+</body>
+</html>
