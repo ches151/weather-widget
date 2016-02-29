@@ -948,6 +948,7 @@
     <Content Include="Scripts\angular\i18n\angular-locale_zu.js" />
     <Content Include="Scripts\widget-editor.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\widget.bootstrap.js" />
     <Content Include="Scripts\widget.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config">

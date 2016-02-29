@@ -1,14 +1,8 @@
 ﻿(function () {
+    /*
+     * As we do not specify ng-app in the markup we need to bootstrap Angular applications manually once DOM is loaded
+     */
     var called = false;
-
-    function ready() {
-        if (called) return;
-        called = true;
-
-        Array.prototype.forEach.call(document.querySelectorAll('w-widget'), function (node) {
-            angular.bootstrap(node, ['widget']);
-        });
-    }
 
     if (document.addEventListener) {
         document.addEventListener("DOMContentLoaded", ready, false);
@@ -19,6 +13,15 @@
                 ready();
             }
         })
+    }
+
+    function ready() {
+        if (called) return;
+        called = true;
+
+        Array.prototype.forEach.call(document.querySelectorAll('w-widget'), function (node) {
+            angular.bootstrap(node, ['widget']);
+        });
     }
 })();
 
@@ -154,7 +157,7 @@
     app.factory('OpenWeather', ['$resource', '$log', '$q', '$timeout', 'cityId', 'apiId', 'positionUrlTemplate',
     function OpenWeather($resource, $log, $q, $timeout, cityId, apiId, positionUrlTemplate) {
         var WeatherByPosition = $resource(positionUrlTemplate);
-        var pause = 150;
+        var pause = 200;
         var timeout = 0 - pause;
 
         return {
