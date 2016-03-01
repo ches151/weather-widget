@@ -11,13 +11,15 @@ namespace WeatherWidget.Migrations
                 "dbo.Widgets",
                 c => new
                     {
-                        Key = c.Guid(nullable: false),
+                        Id = c.Guid(nullable: false),
                         Name = c.String(nullable: false),
-                        Unit = c.Int(nullable: false),
+                        Unit = c.Boolean(nullable: false),
                         ShowWind = c.Boolean(nullable: false),
+                        ShowHumidity = c.Boolean(nullable: false),
+                        ShowLocation = c.Boolean(nullable: false),
                         DateCreated = c.DateTime(nullable: false, precision: 7, storeType: "datetime2"),
                     })
-                .PrimaryKey(t => t.Key);
+                .PrimaryKey(t => t.Id);
             
         }
         

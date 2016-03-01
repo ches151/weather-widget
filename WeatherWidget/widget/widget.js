@@ -1,4 +1,4 @@
-﻿(function () {
+(function () {
     /*
      * As we do not specify ng-app in the markup we need to bootstrap Angular applications manually once DOM is loaded
      */
@@ -12,7 +12,7 @@
             if (document.readyState === "complete") {
                 ready();
             }
-        })
+        });
     }
 
     function ready() {
@@ -26,7 +26,7 @@
 })();
 
 (function () {
-    var app = angular
+    angular
     .module('widget', ['widget.directives', 'widget.services'])
     .controller('MainCtrl', ['$log', '$scope', '$window', '$location', 'Weather',
     function MainCtrl($log, $scope, $window, $location, Weather) {
@@ -41,7 +41,7 @@
                 .then(function (data) {
                     self.data = data;
                 }, function WeatherGetError(err) {
-                    $log.warn(err);
+                    $log.warn('Failed to get weather', err);
                 });
         }
     }]);
@@ -54,12 +54,15 @@
         return {
             restrict: 'E',
             scope: true,
+            templateUrl: 'widget/widget.html',
             link: function (scope, element, attrs, ctrl) {
+                scope.location = typeof attrs.location !== 'undefined';
                 scope.wind = typeof attrs.wind !== 'undefined';
+                scope.humidity = typeof attrs.humidity !== 'undefined';
                 ctrl.acquireWeatherData(attrs.units);
             },
             controller: 'MainCtrl as main'
-        }
+        };
     });
 })();
 
@@ -69,13 +72,15 @@
 
     app.constant('geoPositionOptions', {
         enableHighAccuracy: false,
-        timeout: 5000,
-        maximumAge: 5000
+        timeout: 1000,
+        maximumAge: 3600000
     });
 
     app.factory('Weather', ['$log', '$q', 'OpenWeather', 'Geoposition', 'tools', 'unitsFactory', WeatherService]);
     function WeatherService($log, $q, OpenWeather, Geoposition, tools, unitsFactory) {
         var data;
+
+        
 
         return {
             get: function get(units) {
@@ -83,8 +88,11 @@
 
                 Geoposition.get()
                     .then(function GeopositionReceived(pos) {
-                        return OpenWeather.getByPosition(pos, units)
-                    }, deferred.reject)
+                        return OpenWeather.getByPosition(pos, units);
+                    }, function onGeopositionFail(err){
+                        $log.warn('Failed to obtain geoposition: '+err.message);
+                        deferred.reject;
+                    })
                     .then(function WeatherReceived(resource) {
                         data = resource;
                         deferred.resolve({
@@ -93,18 +101,20 @@
                             wind: getWind(units),
                             iconClass: getIconClass(),
                             location: getLocation()
-                        })
-                    }, deferred.reject);
+                        });
+                    }, function onOpenWeatherFail(err){
+                        $log.warn('Failed to obtain weather from OpenWeather: ', err);
+                    });
                 return deferred.promise;
             }
-        }
+        };
 
         function getTemp(units) {
             var result = 'n/a';
             if (data && data.main) {
                 result = Math.round(data.main.temp, 0);
 
-                result = tools.format('{0}{1} °{2}', result > 0 ? '+' : '', result, unitsFactory[units].temp);
+                result = tools.format('{0}°{1}', result, unitsFactory[units].temp);
             }
             return result;
         }
@@ -112,7 +122,6 @@
             var result = 'n/a';
 
             if (data && data.wind && data.wind) {
-                // TODO pass real Units
                 result = tools.format('{0} {1}', Math.round(data.wind.speed, 0), unitsFactory[units].wind);
             }
             return result;
@@ -144,57 +153,51 @@
             }
             return result;
         }
-
-        return {
-            get: get
-        };
     }
 
     app.value('cityId', '511196');
     app.value('apiId', 'c038faa1c0c6322b27ceb7ca5f333ecf');
     app.value('positionUrlTemplate', 'http://api.openweathermap.org/data/2.5/weather?appid=:apiId&lon=:lon&lat=:lat&units=:units');
 
-    app.factory('OpenWeather', ['$resource', '$log', '$q', '$timeout', 'cityId', 'apiId', 'positionUrlTemplate',
-    function OpenWeather($resource, $log, $q, $timeout, cityId, apiId, positionUrlTemplate) {
+    app.factory('OpenWeather', ['$resource', 'apiId', 'positionUrlTemplate',
+    function OpenWeather($resource, apiId, positionUrlTemplate) {
         var WeatherByPosition = $resource(positionUrlTemplate);
-        var pause = 200;
-        var timeout = 0 - pause;
 
         return {
             getByPosition: function get(pos, units) {
-                var deferred = $q.defer();
-
-                $timeout(function OpenWeatherMapLockReleased() {
-                    WeatherByPosition.get({ apiId: apiId, lon: pos.lon, lat: pos.lat, units: units }).$promise.then(function (data) {
-                        timeout -= pause;
-                        deferred.resolve(data);
-                    });
-                }, timeout += pause);
-
-                return deferred.promise;
-                // return WeatherByPosition.get({ apiId: apiId, lon: pos.lon, lat: pos.lat, units: units }).$promise;
+                return WeatherByPosition.get({ apiId: apiId, lon: pos.lon, lat: pos.lat, units: units }).$promise;
             }
         };
     }]);
-
-    app.factory('Geoposition', ['$log', '$window', '$q', 'geoPositionOptions',
-    function Geoposition($log, $window, $q, geoPositionOptions) {
+    app.value('geoIpServiceUrl', 'http://ip-api.com/json');
+    app.factory('Geoposition', ['$log', '$window', '$q', '$resource', 'geoPositionOptions', 'geoIpServiceUrl',
+    function Geoposition($log, $window, $q, $resource, geoPositionOptions, geoIpServiceUrl) {
         return {
             get: function get() {
+                var deferred = $q.defer();
                 if (!("geolocation" in $window.navigator)) {
-                    throw "Sorry, geoposition is not available in your browser";
+                    deferred.reject({ message:'Sorry, geoposition is not available in your browser' });
                 }
-                else {
-                    var deferred = $q.defer();
 
-                    $window.navigator.geolocation.getCurrentPosition(function success(pos) {
+                $window.navigator.geolocation.getCurrentPosition(function success(pos) {
+                    var position = {
+                        lon: pos.coords.longitude,
+                        lat: pos.coords.latitude
+                    };
+                    return deferred.resolve(position);
+                }, function onGeolocationFail(){
+                    $log.warn('Geoposition is not available, falling back to GeoIP service');
+                    var geoIpService = $resource(geoIpServiceUrl);
+                    geoIpService.get().$promise.then(function success(pos) {
                         var position = {
-                            lon: pos.coords.longitude,
-                            lat: pos.coords.latitude
+                            lon: pos.lon,
+                            lat: pos.lat
                         };
                         return deferred.resolve(position);
-                    }, deferred.reject, geoPositionOptions);
-                }
+                    }, deferred.reject);
+
+                }, geoPositionOptions);
+
                 return deferred.promise;
             }
         };
@@ -210,7 +213,7 @@
                 wind: 'm/s',
                 temp: 'C'
             }
-        }
+        };
     }]);
 
     app.factory('tools', [function tools() {
@@ -218,11 +221,11 @@
             format: function format(str) {
                 var args = Array.prototype.slice.call(arguments, 1);
                 return str.replace(/{(\d+)}/g, function (match, number) {
-                    return typeof args[number] != 'undefined'
+                    return typeof args[number] !== 'undefined'
                       ? args[number]
                       : match
                     ;
-                })
+                });
             }
         };
     }]);

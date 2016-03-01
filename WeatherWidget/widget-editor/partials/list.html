@@ -1,0 +1,34 @@
+﻿<md-content class="md-padding" layout-xs="column" layout="row" layout-align="center start">
+    <div flex-xs flex-gt-xs="50" layout="column">
+        <span class="md-body-1">To add a new widget click the Blue Button at the right bottom corner of the screen.<br />Example page is <a href="/example.html">here</a></span>
+        <md-button class="md-fab w-right-bottom-button" ng-click="ctrl.go('widget')" aria-label="Create New">
+            <i class="material-icons">add</i>
+        </md-button>
+        <md-card class="w-fix-min-width" ng-repeat="widget in ctrl.widgets.value">
+            <md-card-title>
+                <md-card-title-text>
+                    <span class="md-headline">{{widget.name}}</span>
+                    <span class="md-subhead">
+                        <span>{{widget.unit ? 'Imperial' : 'Metric'}}</span>
+                    </span>
+                </md-card-title-text>
+                <md-card-title-media>
+                    <md-button class="md-raised md-primary" ng-click="ctrl.showCode($event, widget)">Get code</md-button>
+                </md-card-title-media>
+            </md-card-title>
+            <md-card-content>
+                <div ng-if="widget.showWind">Wind</div>
+                <div ng-if="widget.showHumidity">Humidity</div>
+                <div ng-if="widget.showLocation">Location</div>
+            </md-card-content>
+            <md-card-actions layout="row" layout-align="end center">
+                <md-button class="md-icon-button md-primary" ng-click="ctrl.go('widget/'+widget.id)" aria-label="Edit widget">
+                    <i class="material-icons">mode_edit</i>
+                </md-button>
+                <md-button class="md-icon-button md-primary" ng-click="ctrl.remove(widget)" aria-label="Delete widget">
+                    <i class="material-icons">delete</i>
+                </md-button>
+            </md-card-actions>
+        </md-card>
+    </div>
+</md-content>

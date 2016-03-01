@@ -32,14 +32,14 @@ namespace WeatherWidget.Controllers
         [EnableQuery]
         public IQueryable<Widget> GetWidgets()
         {
-            return db.Widgets;
+            return db.Widgets.OrderBy(w=>w.DateCreated);
         }
 
         // GET: odata/Widgets(5)
         [EnableQuery]
         public SingleResult<Widget> GetWidget([FromODataUri] Guid key)
         {
-            return SingleResult.Create(db.Widgets.Where(widget => widget.Key == key));
+            return SingleResult.Create(db.Widgets.Where(widget => widget.Id == key));
         }
 
         // PUT: odata/Widgets(5)
@@ -87,6 +87,8 @@ namespace WeatherWidget.Controllers
                 return BadRequest(ModelState);
             }
 
+            widget.DateCreated = DateTime.Now;
+
             db.Widgets.Add(widget);
 
             try
@@ -95,7 +97,7 @@ namespace WeatherWidget.Controllers
             }
             catch (DbUpdateException)
             {
-                if (WidgetExists(widget.Key))
+                if (WidgetExists(widget.Id))
                 {
                     return Conflict();
                 }
@@ -172,7 +174,7 @@ namespace WeatherWidget.Controllers
 
         private bool WidgetExists(Guid key)
         {
-            return db.Widgets.Count(e => e.Key == key) > 0;
+            return db.Widgets.Count(e => e.Id == key) > 0;
         }
     }
 }

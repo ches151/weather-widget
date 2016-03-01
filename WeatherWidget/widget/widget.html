@@ -1,0 +1,11 @@
+<div class="row background-image box-shadowed container">
+    <div class="column cell center white-shadowed-text">
+        <i class="wi large" ng-class="main.data.iconClass"></i>
+        <span class="title" ng-show="location && main.data.location">{{main.data.location}}</span>
+    </div>
+    <div class="column cell center white-shadowed-text">
+        <div class="text-right large" ng-show="main.data.temp">{{main.data.temp}}</div>
+        <div class="text-right" ng-show="humidity && main.data.humidity">Humidity: {{main.data.humidity}} %</div>
+        <div class="text-right" ng-show="wind && main.data.wind">Wind: {{main.data.wind}}</div>
+    </div>
+</div>

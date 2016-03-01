@@ -29,20 +29,16 @@ namespace WeatherWidget.Models
         public virtual DbSet<Widget> Widgets { get; set; }
     }
 
-    public enum WeatherUnit
-    {
-        Metric,
-        Imperial
-    }
-
     public class Widget
     {
         [Key]
-        public Guid Key { get; set; }
+        public Guid Id { get; set; }
         [Required] 
         public string Name { get; set; }
-        public WeatherUnit Unit { get; set; }
+        public bool Unit { get; set; }
         public bool ShowWind { get; set; }
+        public bool ShowHumidity { get; set; }
+        public bool ShowLocation { get; set; }
 
         public DateTime DateCreated { get; set; }
     }

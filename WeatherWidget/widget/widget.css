@@ -1,0 +1,59 @@
+w-widget {
+    font-family: Helvetica,Arial,sans-serif;
+}
+
+.container {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    max-width: 344px;
+    min-height: 100px;
+    padding: 0.5em;
+}
+
+.row, .column {
+    display: flex;
+}
+
+.row {
+    -ms-flex-direction: row;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.column {
+    -ms-flex-direction: column;
+    -webkit-flex-direction: column;
+    flex-direction: column;
+}
+
+.cell.center {
+    align-self: center;
+    text-align: center;
+}
+
+.title {
+    padding-top: 0.8em;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.large {
+    font-size: 48pt;
+}
+
+.background-image {
+    background: #feffff url('sky-clouds-cloudy-blur.jpg') center top;
+}
+
+.box-shadowed {
+    box-shadow: 0 0 25px -2px rgba(0,0,0,0.75);
+}
+
+.white-shadowed-text {
+    color: white;
+    text-shadow: 0 2px 6px rgba(50, 50, 50, 1);
+}

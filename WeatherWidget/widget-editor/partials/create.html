@@ -1,0 +1,38 @@
+﻿<md-content class="md-padding" layout-xs="column" layout="row" layout-align="center start">
+    <div flex-xs flex-gt-xs="50" layout="column">
+        <form name="widgetForm">
+            <md-card class="w-fix-min-width">
+                <md-card-title>
+                    <md-card-title-text>
+                        <md-input-container class="md-block">
+                            <label>Widget title</label>
+                            <input required autofocus name="widgetName" ng-model="ctrl.widget.name" autocomplete="off" w-focus-next-on-enter>
+                            <div ng-messages="widgetForm.widgetName.$error">
+                                <div ng-message="required">This field is required.</div>
+                            </div>
+                        </md-input-container>
+                        <div layout-xs="column" flex-xs="100">
+                            <md-checkbox md-no-ink aria-label="Units" ng-model="ctrl.widget.unit" class="md-primary">
+                                Units: {{ ctrl.widget.unit ? 'Imperial':'Metric' }}
+                            </md-checkbox>
+                            <md-checkbox md-no-ink aria-label="Show wind" ng-model="ctrl.widget.showWind" class="md-primary">
+                                Wind
+                            </md-checkbox>
+                            <md-checkbox md-no-ink aria-label="Show humidity" ng-model="ctrl.widget.showHumidity" class="md-primary">
+                                Humidity
+                            </md-checkbox>
+                            <md-checkbox md-no-ink aria-label="Show location" ng-model="ctrl.widget.showLocation" class="md-primary">
+                                Location
+                            </md-checkbox>
+                        </div>
+                    </md-card-title-text>
+                </md-card-title>
+                <md-card-actions layout="row" layout-align="end center">
+                    <md-button class="md-icon-button md-primary" ng-click="ctrl.save()" aria-label="Save widget">
+                        <i class="material-icons">save</i>
+                    </md-button>
+                </md-card-actions>
+            </md-card>
+        </form>
+    </div>
+</md-content>
