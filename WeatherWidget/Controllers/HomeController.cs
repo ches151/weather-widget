@@ -12,21 +12,10 @@ namespace WeatherWidget.Controllers
 {
     public class HomeController : BaseController
     {
-        private DataModel db = new DataModel();
-
         // GET: Home
         public ActionResult Index()
         {
-            return View(db.Widgets.OrderBy(w=>w.DateCreated).ToList());
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
+            return View();
         }
     }
 }
