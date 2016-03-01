@@ -115,7 +115,7 @@
     app.factory('widgetService', ['$resource', 'tools', 'embedCodeTemplate', widgetService]);
     function widgetService($resource, tools, embedCodeTemplate) {
         var service = $resource('/odata/Widgets:widgetId', {}, {
-            patch: { method: 'PATCH', params: { widgetId: '@id' } }
+            put: { method: 'PUT', params: { widgetId: '@id' } }
         });
 
         function get(widgetId) {
@@ -128,7 +128,7 @@
                 widget.id = tools.guid();
                 return service.save(widget);
             } else {
-                return service.patch({ widgetId: '(' + widget.id + ')' }, widget);
+                return service.put({ widgetId: '(' + widget.id + ')' }, widget);
             }
         }
 

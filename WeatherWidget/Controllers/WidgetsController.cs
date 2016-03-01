@@ -110,44 +110,6 @@ namespace WeatherWidget.Controllers
             return Created(widget);
         }
 
-        // PATCH: odata/Widgets(5)
-        [AcceptVerbs("PATCH", "MERGE")]
-        public IHttpActionResult Patch([FromODataUri] Guid key, Delta<Widget> patch)
-        {
-            Validate(patch.GetEntity());
-
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            Widget widget = db.Widgets.Find(key);
-            if (widget == null)
-            {
-                return NotFound();
-            }
-
-            patch.Patch(widget);
-
-            try
-            {
-                db.SaveChanges();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!WidgetExists(key))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return Updated(widget);
-        }
-
         // DELETE: odata/Widgets(5)
         public IHttpActionResult Delete([FromODataUri] Guid key)
         {
