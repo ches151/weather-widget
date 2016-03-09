@@ -28,8 +28,8 @@
 (function () {
     angular
     .module('widget', ['widget.directives', 'widget.services'])
-    .controller('MainCtrl', ['$log', '$scope', '$window', '$location', 'Weather',
-    function MainCtrl($log, $scope, $window, $location, Weather) {
+    .controller('MainCtrl', ['$log', 'Weather',
+    function MainCtrl($log,  Weather) {
         var self = this;
 
         self.data = {};
@@ -37,7 +37,7 @@
 
         // called from w-widget directive
         function acquireWeatherData(units) {
-            Weather.get(units)
+            return Weather.get(units)
                 .then(function (data) {
                     self.data = data;
                 }, function WeatherGetError(err) {

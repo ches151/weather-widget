@@ -181,6 +181,7 @@
     <Content Include="example.html" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="package.json" />
     <Content Include="Scripts\angular-animate\angular-animate.js" />
     <Content Include="Scripts\angular-animate\angular-animate.min.js" />
     <Content Include="Scripts\angular-aria\angular-aria.js" />
@@ -957,6 +958,11 @@
     <Content Include="Scripts\angular\i18n\angular-locale_zh.js" />
     <Content Include="Scripts\angular\i18n\angular-locale_zu-za.js" />
     <Content Include="Scripts\angular\i18n\angular-locale_zu.js" />
+    <Content Include="test\karma.conf.js" />
+    <Content Include="test\unit\widget-editor\controllersSpec.js" />
+    <Content Include="test\unit\widget-editor\servicesSpec.js" />
+    <Content Include="test\unit\widget\controllersSpec.js" />
+    <Content Include="test\unit\widget\servicesSpec.js" />
     <Content Include="widget-editor\partials\create.html" />
     <Content Include="widget-editor\partials\codedialog.tmpl.html" />
     <Content Include="widget-editor\partials\list.html" />
@@ -981,7 +987,6 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Content Include="packages.config" />
   </ItemGroup>
@@ -1032,6 +1037,7 @@
   <ItemGroup>
     <Content Include="Views\Home\Index.cshtml" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

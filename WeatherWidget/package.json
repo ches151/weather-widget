@@ -1,0 +1,26 @@
+{
+  "name": "weather-widget",
+  "version": "1.0.0",
+  "description": "Simple weather widget editor",
+  "author": "Denis Malyshev <denis.malyshev.87@gmail.com>",
+  "scripts": {
+    "test": "node node_modules/karma/bin/karma start test/karma.conf.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ches151/weather-widget.git"
+  },
+  "keywords": [
+    "weather",
+    "widget"
+  ],
+  "private": true,
+  "license": "MIT",
+  "devDependencies": {
+    "jasmine-core": "^2.4.1",
+    "karma": "^0.13.21",
+    "karma-chrome-launcher": "^0.2.2",
+    "karma-jasmine": "^0.3.7",
+    "karma-jasmine-html-reporter": "^0.2.0"
+  }
+}
